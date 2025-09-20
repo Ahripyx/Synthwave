@@ -34,6 +34,11 @@ namespace GameInterface
         private static GamePiece collectible;
         private HashSet<Windows.System.VirtualKey> pressedKeys = new HashSet<Windows.System.VirtualKey>();
         private DispatcherTimer gameTimer;
+
+        private double cameraOffsetX = 0;
+        private double cameraOffsetY = 0;
+        private double playerScreenX = 0;
+        private double playerScreenY = 0;
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,12 +53,15 @@ namespace GameInterface
             ApplicationView.PreferredLaunchViewSize = new Size(1152, 648); // avg retro game size
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
-            // Start the game loop
-            gameTimer = new DispatcherTimer();
-            gameTimer.Interval = TimeSpan.FromMilliseconds(16); // ~60 FPS
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Start();
+            gridMain.Loaded += (s, e) =>
+            {
+                gameTimer = new DispatcherTimer();
+                gameTimer.Interval = TimeSpan.FromMilliseconds(16); // ~60 FPS
+                gameTimer.Tick += GameTimer_Tick;
+                gameTimer.Start();
+            };
         }
+
 
         /// <summary>
         /// This method creates the Image object (to display the picture) and sets its properties.
@@ -82,7 +90,7 @@ namespace GameInterface
         }
 
 
-
+        // Event handlers for key presses
         private void CoreWindow_KeyDown(object sender, Windows.UI.Core.KeyEventArgs e)
         {
             pressedKeys.Add(e.VirtualKey);
@@ -91,10 +99,18 @@ namespace GameInterface
         {
             pressedKeys.Remove(e.VirtualKey);
         }
+
+        // Game loop tick event
         private async void GameTimer_Tick(object sender, object e)
         {
-            // Move player based on currently pressed keys
-            player.Move(pressedKeys);
+            // Get grid size for edge clamping
+            double gridWidth = gridMain.ActualWidth;
+            double gridHeight = gridMain.ActualHeight;
+
+            if (gridWidth == 0 || gridHeight == 0) return;
+
+            // Move player and clamp to grid
+            player.Move(pressedKeys, gridWidth, gridHeight);
 
             // Check for collision
             if (player.Location == collectible.Location)

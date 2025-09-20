@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -18,37 +19,52 @@ namespace GameLibrary
             get { return onScreen.Margin; }
         }
 
+        public double Width => onScreen.Width;
+        public double Height => onScreen.Height;
+
         public GamePiece(Image img)                 //constructor creates a piece and a reference to its associated image
         {                                           //use this to set up other GamePiece properties
             onScreen = img;
             objectMargins = img.Margin;
         }
 
-        public bool Move(HashSet<VirtualKey> directions)   //calculate a new location for the piece, based on a key press
+        public bool Move(HashSet<VirtualKey> directions, double containerWidth, double containerHeight)
         {
             bool moved = false;
+            double step = 10;
+
+            double newLeft = objectMargins.Left;
+            double newTop = objectMargins.Top;
 
             if (directions.Contains(VirtualKey.W))
             {
-                objectMargins.Top -= 10;
+                newTop -= step;
                 moved = true;
             }
             if (directions.Contains(VirtualKey.S))
             {
-                objectMargins.Top += 10;
+                newTop += step;
                 moved = true;
             }
             if (directions.Contains(VirtualKey.A))
             {
-                objectMargins.Left -= 10;
+                newLeft -= step;
                 moved = true;
             }
             if (directions.Contains(VirtualKey.D))
             {
-                objectMargins.Left += 10;
+                newLeft += step;
                 moved = true;
             }
-            if (moved) onScreen.Margin = objectMargins;  //update the image location on screen
+
+            // Clamp so the ENTIRE image stays onscreen
+            newLeft = Math.Max(0, Math.Min(newLeft, containerWidth - onScreen.Width));
+            newTop = Math.Max(0, Math.Min(newTop, containerHeight - onScreen.Height));
+
+            objectMargins.Left = newLeft;
+            objectMargins.Top = newTop;
+            onScreen.Margin = objectMargins;
+
             return moved;
         }
     }
