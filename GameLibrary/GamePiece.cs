@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml;
+﻿using System.Collections.Generic;
+using Windows.System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 //Project: Lab 1A - UWP Game
@@ -22,27 +24,32 @@ namespace GameLibrary
             objectMargins = img.Margin;
         }
 
-        public bool Move(Windows.System.VirtualKey direction)   //calculate a new location for the piece, based on a key press
+        public bool Move(HashSet<VirtualKey> directions)   //calculate a new location for the piece, based on a key press
         {
-            switch (direction)
+            bool moved = false;
+
+            if (directions.Contains(VirtualKey.W))
             {
-                case Windows.System.VirtualKey.Up:
-                    objectMargins.Top -= 10;
-                    break;
-                case Windows.System.VirtualKey.Down:
-                    objectMargins.Top += 10;
-                    break;
-                case Windows.System.VirtualKey.Left:
-                    objectMargins.Left -= 10;
-                    break;
-                case Windows.System.VirtualKey.Right:
-                    objectMargins.Left += 10;
-                    break;
-                default:
-                    return false;
+                objectMargins.Top -= 10;
+                moved = true;
             }
-            onScreen.Margin = objectMargins;            //assign the new position to the on-screen image
-            return true;
+            if (directions.Contains(VirtualKey.S))
+            {
+                objectMargins.Top += 10;
+                moved = true;
+            }
+            if (directions.Contains(VirtualKey.A))
+            {
+                objectMargins.Left -= 10;
+                moved = true;
+            }
+            if (directions.Contains(VirtualKey.D))
+            {
+                objectMargins.Left += 10;
+                moved = true;
+            }
+            if (moved) onScreen.Margin = objectMargins;  //update the image location on screen
+            return moved;
         }
     }
 }

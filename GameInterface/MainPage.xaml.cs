@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Popups;
 using GameLibrary;
+using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,13 +32,27 @@ namespace GameInterface
     {
         private static GamePiece player;
         private static GamePiece collectible;
+        private HashSet<Windows.System.VirtualKey> pressedKeys = new HashSet<Windows.System.VirtualKey>();
+        private DispatcherTimer gameTimer;
         public MainPage()
         {
             this.InitializeComponent();
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+            Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
 
-            player = CreatePiece("player", 100, 50, 50);                      //create a GamePiece object associated with the pac-man image
+            player = CreatePiece("player", 48, 50, 50);                      //create a GamePiece object associated with the pac-man image
             collectible = CreatePiece("collectible", 50, 150, 150);
+
+
+            //Setting preffered launch size and forcing it on user wehn game launches
+            ApplicationView.PreferredLaunchViewSize = new Size(1152, 648); // avg retro game size
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
+            // Start the game loop
+            gameTimer = new DispatcherTimer();
+            gameTimer.Interval = TimeSpan.FromMilliseconds(16); // ~60 FPS
+            gameTimer.Tick += GameTimer_Tick;
+            gameTimer.Start();
         }
 
         /// <summary>
@@ -66,15 +81,26 @@ namespace GameInterface
             return new GamePiece(img);
         }
 
-        private async void CoreWindow_KeyDown(object sender, Windows.UI.Core.KeyEventArgs e)
-        {
-            //Calculate new location for the player character
-            player.Move(e.VirtualKey);
 
-            //Check for collisions between player and collectible
-            //Note: this looks for identical top/left locations of the two objects. To be more precise, you can write a better collision detection method!
+
+        private void CoreWindow_KeyDown(object sender, Windows.UI.Core.KeyEventArgs e)
+        {
+            pressedKeys.Add(e.VirtualKey);
+        }
+        private void CoreWindow_KeyUp(object sender, Windows.UI.Core.KeyEventArgs e)
+        {
+            pressedKeys.Remove(e.VirtualKey);
+        }
+        private async void GameTimer_Tick(object sender, object e)
+        {
+            // Move player based on currently pressed keys
+            player.Move(pressedKeys);
+
+            // Check for collision
             if (player.Location == collectible.Location)
+            {
                 await new MessageDialog("Collision Detected").ShowAsync();
+            }
         }
     }
 }
