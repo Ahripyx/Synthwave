@@ -36,28 +36,12 @@ namespace GameLibrary
             double newLeft = objectMargins.Left;
             double newTop = objectMargins.Top;
 
-            if (directions.Contains(VirtualKey.W))
-            {
-                newTop -= step;
-                moved = true;
-            }
-            if (directions.Contains(VirtualKey.S))
-            {
-                newTop += step;
-                moved = true;
-            }
-            if (directions.Contains(VirtualKey.A))
-            {
-                newLeft -= step;
-                moved = true;
-            }
-            if (directions.Contains(VirtualKey.D))
-            {
-                newLeft += step;
-                moved = true;
-            }
+            if (directions.Contains(VirtualKey.W)) { newTop -= step; moved = true; }
+            if (directions.Contains(VirtualKey.S)) { newTop += step; moved = true; }
+            if (directions.Contains(VirtualKey.A)) { newLeft -= step; moved = true; }
+            if (directions.Contains(VirtualKey.D)) { newLeft += step; moved = true; }
 
-            // Clamp so the ENTIRE image stays onscreen
+            // Clamp position to always be inside the grid
             newLeft = Math.Max(0, Math.Min(newLeft, containerWidth - onScreen.Width));
             newTop = Math.Max(0, Math.Min(newTop, containerHeight - onScreen.Height));
 
