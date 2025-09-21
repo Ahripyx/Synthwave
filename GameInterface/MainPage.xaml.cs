@@ -35,10 +35,6 @@ namespace GameInterface
         private HashSet<Windows.System.VirtualKey> pressedKeys = new HashSet<Windows.System.VirtualKey>();
         private DispatcherTimer gameTimer;
 
-        private double cameraOffsetX = 0;
-        private double cameraOffsetY = 0;
-        private double playerScreenX = 0;
-        private double playerScreenY = 0;
         public MainPage()
         {
             this.InitializeComponent();
@@ -48,6 +44,8 @@ namespace GameInterface
             player = CreatePiece("player", 48, 50, 50);                      //create a GamePiece object associated with the pac-man image
             collectible = CreatePiece("collectible", 50, 150, 150);
 
+            gridMain.Width = 1152;
+            gridMain.Height = 648;
 
             //Setting preffered launch size and forcing it on user wehn game launches
             ApplicationView.PreferredLaunchViewSize = new Size(1152, 648); // avg retro game size
@@ -101,22 +99,14 @@ namespace GameInterface
         }
 
         // Game loop tick event
-        private async void GameTimer_Tick(object sender, object e)
+        private void GameTimer_Tick(object sender, object e)
         {
-            // Get grid size for edge clamping
             double gridWidth = gridMain.ActualWidth;
             double gridHeight = gridMain.ActualHeight;
 
-            if (gridWidth == 0 || gridHeight == 0) return;
+            if (gridWidth <= 0 || gridHeight <= 0) return; // Ensure valid dimensions
 
-            // Move player and clamp to grid
             player.Move(pressedKeys, gridWidth, gridHeight);
-
-            // Check for collision
-            if (player.Location == collectible.Location)
-            {
-                await new MessageDialog("Collision Detected").ShowAsync();
-            }
         }
     }
 }
