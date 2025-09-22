@@ -32,8 +32,14 @@ namespace GameInterface
     {
         private static GamePiece player;
         private static GamePiece collectible;
+        private static Random rng = new Random();
         private HashSet<Windows.System.VirtualKey> pressedKeys = new HashSet<Windows.System.VirtualKey>();
+
+        //Timers
         private DispatcherTimer gameTimer;
+        private DispatcherTimer enemySpawnTimer;
+
+        private List<GamePiece> enemies = new List<GamePiece>();
 
         public MainPage()
         {
@@ -53,31 +59,47 @@ namespace GameInterface
 
             gridMain.Loaded += (s, e) =>
             {
+                // Setting game timer so player movement is smooth
                 gameTimer = new DispatcherTimer();
-                gameTimer.Interval = TimeSpan.FromMilliseconds(16); // ~60 FPS
+                gameTimer.Interval = TimeSpan.FromMilliseconds(16); // 60 FPS
                 gameTimer.Tick += GameTimer_Tick;
                 gameTimer.Start();
+
+                // Setting enemy spawn timer
+                enemySpawnTimer = new DispatcherTimer();
+                enemySpawnTimer.Interval = TimeSpan.FromSeconds(2);
+                enemySpawnTimer.Tick += EnemySpawnTimer_Tick;
+                enemySpawnTimer.Start();
             };
         }
 
+        private void EnemySpawnTimer_Tick(object sender, object e)
+        {
+            // Spawn enemy at random location
+            int enemyX = rng.Next(0, (int)(gridMain.Width - 48));
+            int enemyY = rng.Next(0, (int)(gridMain.Height - 48));
+            var newEnemy = CreatePiece("enemy", 48, enemyX, enemyY);
+            enemies.Add(newEnemy);
 
-        /// <summary>
+            // Removing enemy after 3 seconds: Using for testing purposes
+            var removalTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+            removalTimer.Tick += (s2, e2) =>
+            {
+                removalTimer.Stop();
+                gridMain.Children.Remove(newEnemy.Image);
+                enemies.Remove(newEnemy);
+            };
+            removalTimer.Start();
+        }
+
         /// This method creates the Image object (to display the picture) and sets its properties.
-        /// It adds the image to the screen.
-        /// Then it calls the GamePiece constructor, passing the Image object as a parameter.
-        /// </summary>
-        /// <param name="imgSrc">Name of the image file</param>
-        /// <param name="size">Size in pixels (used for both dimensions, the images are square)</param>
-        /// <param name="left">Left location relative to parent</param>
-        /// <param name="top">Top location relative to parent</param>
-        /// <returns></returns>
         private GamePiece CreatePiece(string imgSrc, int size, int left, int top)
         {
             Image img = new Image();
             img.Source = new BitmapImage(new Uri($"ms-appx:///Assets/{imgSrc}.png"));
             img.Width = size;
             img.Height = size;
-            img.Name = $"img{imgSrc}";
+            img.Name = $"img{imgSrc}" + Guid.NewGuid().ToString("N");
             img.Margin = new Thickness(left, top, 0, 0);
             img.VerticalAlignment = VerticalAlignment.Top;
             img.HorizontalAlignment = HorizontalAlignment.Left;
@@ -104,9 +126,15 @@ namespace GameInterface
             double gridWidth = gridMain.ActualWidth;
             double gridHeight = gridMain.ActualHeight;
 
-            if (gridWidth <= 0 || gridHeight <= 0) return; // Ensure valid dimensions
+            if (gridWidth <= 0 || gridHeight <= 0) return;
 
             player.Move(pressedKeys, gridWidth, gridHeight);
+
+            // Move all active enemies toward player
+            foreach (var enemy in enemies.ToList())
+            {
+                enemy.MoveTowards(player.Left, player.Top, 1.5);
+            }
         }
     }
 }

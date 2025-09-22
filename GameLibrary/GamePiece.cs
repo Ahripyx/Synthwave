@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Devices.Bluetooth.Background;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,6 +29,9 @@ namespace GameLibrary
             objectMargins = img.Margin;
         }
 
+        public Image Image => onScreen; // provide access to the image for adding and removing to the UI
+
+        // Player movement function
         public bool Move(HashSet<VirtualKey> directions, double containerWidth, double containerHeight)
         {
             bool moved = false;
@@ -36,7 +40,7 @@ namespace GameLibrary
             double newLeft = objectMargins.Left;
             double newTop = objectMargins.Top;
 
-            if (directions.Contains(VirtualKey.W)) { newTop -= step; moved = true; }
+            if (directions.Contains(VirtualKey.W) || directions.Contains(VirtualKey.Up)) { newTop -= step; moved = true; }
             if (directions.Contains(VirtualKey.S)) { newTop += step; moved = true; }
             if (directions.Contains(VirtualKey.A)) { newLeft -= step; moved = true; }
             if (directions.Contains(VirtualKey.D)) { newLeft += step; moved = true; }
@@ -57,6 +61,49 @@ namespace GameLibrary
             onScreen.Margin = objectMargins;
 
             return moved;
+        }
+
+
+        // Getting positionings
+        public double Left
+        {
+            get => objectMargins.Left;
+            set
+            {
+                objectMargins.Left = value;
+                onScreen.Margin = objectMargins;
+            }
+        }
+
+        public double Top
+        {
+            get => objectMargins.Top;
+            set
+            {
+                objectMargins.Top = value;
+                onScreen.Margin = objectMargins;
+            }
+        }
+
+        public void SetPosition(double left, double top)
+        {
+            objectMargins.Left = left;
+            objectMargins.Top = top;
+            onScreen.Margin = objectMargins;
+        }
+
+        // Enemy movement function
+        public void MoveTowards(double targetX, double targetY, double speed)
+        {
+            double dx = targetX - this.Left;
+            double dy = targetY - this.Top;
+            double distance = Math.Sqrt(dx * dx + dy * dy);
+            if (distance < 1.0) return; // Already close enough
+
+            double stepX = dx / distance * speed;
+            double stepY = dy / distance * speed;
+
+            SetPosition(this.Left + stepX, this.Top + stepY);
         }
     }
 }
