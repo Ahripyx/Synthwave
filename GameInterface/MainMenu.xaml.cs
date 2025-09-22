@@ -94,7 +94,8 @@ namespace GameInterface
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            // Navigate to the game page
+            this.Frame.Navigate(typeof(MainPage));
         }
     }
 }
