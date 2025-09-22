@@ -75,9 +75,32 @@ namespace GameInterface
 
         private void EnemySpawnTimer_Tick(object sender, object e)
         {
-            // Spawn enemy at random location
-            int enemyX = rng.Next(0, (int)(gridMain.Width - 48));
-            int enemyY = rng.Next(0, (int)(gridMain.Height - 48));
+
+            int enemySize = 48;
+            int maxTries = 5;
+            int tries = 0;
+            double minDistance = 100; // Minimum distance from player
+
+            double playerX = player.Left + player.Width / 2;
+            double playerY = player.Top + player.Height / 2;
+
+            int enemyX, enemyY;
+            double enemyCenterX, enemyCenterY, distance;
+
+            do
+            {
+                enemyX = rng.Next(0, (int)(gridMain.Width - enemySize));
+                enemyY = rng.Next(0, (int)(gridMain.Height - enemySize));
+                enemyCenterX = enemyX + enemySize / 2.0;
+                enemyCenterY = enemyY + enemySize / 2.0;
+
+                double dx = playerX - enemyCenterX;
+                double dy = playerY - enemyCenterY;
+                distance = Math.Sqrt(dx * dx + dy * dy);
+
+                tries++;
+            }
+            while (distance < minDistance && tries < maxTries);
             var newEnemy = CreatePiece("enemy", 48, enemyX, enemyY);
             enemies.Add(newEnemy);
 
