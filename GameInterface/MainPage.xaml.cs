@@ -249,6 +249,14 @@ namespace GameInterface
                     UpdateHealthBar();
                     gridMain.Children.Remove(enemy.Image);
                     enemies.Remove(enemy);
+
+                    if (playerHealth <= 0)
+                    {
+                        gameTimer.Stop();
+                        enemySpawnTimer.Stop();
+                        projectileTimer.Stop();
+                        Frame.Navigate(typeof(GameOver));
+                    }
                 }
             }
         }
