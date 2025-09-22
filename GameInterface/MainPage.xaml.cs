@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml.Input;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -38,6 +39,10 @@ namespace GameInterface
         private Rectangle healthBar;
         private int playerHealth = 100;
         private const int maxHealth = 100;
+
+        private List<Projectile> projectiles = new List<Projectile>();
+        private DispatcherTimer projectileTimer;
+        private Point mousePosition;
 
         public MainPage()
         {
@@ -81,6 +86,13 @@ namespace GameInterface
             ApplicationView.PreferredLaunchViewSize = new Size(1152, 648); // avg retro game size
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            gridMain.PointerMoved += GridMain_PointerMoved;
+
+            projectileTimer = new DispatcherTimer();
+            projectileTimer.Interval = TimeSpan.FromSeconds(0.5);
+            projectileTimer.Tick += ProjectileTimer_Tick;
+            projectileTimer.Start();
+
             gridMain.Loaded += (s, e) =>
             {
                 // Setting game timer so player movement is smooth
@@ -95,6 +107,45 @@ namespace GameInterface
                 enemySpawnTimer.Tick += EnemySpawnTimer_Tick;
                 enemySpawnTimer.Start();
             };
+        }
+        private void ProjectileTimer_Tick(object sender, object e)
+        {
+            if (mousePosition == null || player == null) return;
+
+            Image projImage = new Image
+            {
+                Source = new BitmapImage(new Uri("ms-appx:///Assets/projectile.png")),
+                Width = 24,
+                Height = 32
+            };
+
+            double playerX = player.Left + player.Width / 2 - projImage.Width / 2;
+            double playerY = player.Top + player.Height / 2 - projImage.Height / 2;
+
+            double mouseX = mousePosition.X - playerX;
+            double mouseY = mousePosition.Y - playerY;
+            double length = Math.Sqrt(mouseX * mouseX + mouseY * mouseY);
+            if (length < 1) return; // Prevent division by zero
+
+            double speed = 60; // Projectile speed
+            double velocityX = (mouseX / length) * speed;
+            double velocityY = (mouseY / length) * speed;
+
+            double angle = Math.Atan2(mouseY, mouseX) * 180.0 / Math.PI - 90.0;
+            var rotate = new RotateTransform
+            {
+                Angle = angle,
+                CenterX = projImage.Width / 2,
+                CenterY = projImage.Height / 2
+            };
+            projImage.RenderTransform = rotate;
+
+            projImage.Margin = new Thickness(playerX, playerY, 0, 0);
+            projImage.VerticalAlignment = VerticalAlignment.Top;
+            projImage.HorizontalAlignment = HorizontalAlignment.Left;
+            gridMain.Children.Add(projImage);
+
+            projectiles.Add(new Projectile { Image = projImage, X = playerX, Y = playerY, VelocityX = velocityX, VelocityY = velocityY });
         }
 
         private void EnemySpawnTimer_Tick(object sender, object e)
@@ -142,6 +193,41 @@ namespace GameInterface
         // Game loop tick event
         private void GameTimer_Tick(object sender, object e)
         {
+            for (int i = projectiles.Count - 1; i >= 0; i--)
+            {
+                var proj = projectiles[i];
+                proj.X += proj.VelocityX;
+                proj.Y += proj.VelocityY;
+                // Update projectile position
+                proj.Image.Margin = new Thickness(proj.X, proj.Y, 0, 0);
+                // Remove projectile if it goes off-screen
+                if (proj.X < -proj.Width || proj.X > gridMain.ActualWidth || proj.Y < -proj.Height || proj.Y > gridMain.ActualHeight)
+                {
+                    gridMain.Children.Remove(proj.Image);
+                    projectiles.RemoveAt(i);
+                    continue;
+                }
+                // Check collision with enemies
+                bool hitEnemy = false;
+                for (int j = enemies.Count - 1; j >= 0; j--)
+                {
+                    var enemy = enemies[j];
+                    if (RectsOverlap(proj.X, proj.Y, proj.Width, proj.Height,
+                                     enemy.Left, enemy.Top, enemy.Width, enemy.Height))
+                    {
+                        hitEnemy = true;
+                        gridMain.Children.Remove(enemy.Image);
+                        enemies.RemoveAt(j);
+                        break;
+                    }
+                }
+                if (hitEnemy)
+                {
+                    gridMain.Children.Remove(proj.Image);
+                    projectiles.RemoveAt(i);
+                }
+            }
+
             double gridWidth = gridMain.ActualWidth;
             double gridHeight = gridMain.ActualHeight;
 
@@ -210,6 +296,11 @@ namespace GameInterface
         {
             double percent = Math.Max(0, (double)playerHealth / maxHealth);
             healthBar.Width = 400 * percent;
+        }
+
+        private void GridMain_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            mousePosition = e.GetCurrentPoint(gridMain).Position;
         }
     }
 }
