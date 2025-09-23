@@ -10,6 +10,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Input;
+using Windows.Media.Playback;
+using Windows.Media.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -111,6 +113,12 @@ namespace GameInterface
         private void ProjectileTimer_Tick(object sender, object e)
         {
             if (mousePosition == null || player == null) return;
+
+            var sfx = new MediaPlayer();
+            sfx.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/retrolaser.wav"));
+            sfx.Volume = 0.1;
+            sfx.Play();
+            sfx.MediaEnded += (snd, args) => sfx.Dispose();
 
             Image projImage = new Image
             {
