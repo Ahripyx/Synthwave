@@ -104,17 +104,17 @@ namespace GameInterface
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Application.Current.Exit();
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Frame.Navigate(typeof(MainMenu));
         }
 
         private void RetryButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Frame.Navigate(typeof(MainPage));
         }
     }
 }
