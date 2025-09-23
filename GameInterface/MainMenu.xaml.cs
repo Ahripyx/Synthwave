@@ -62,7 +62,11 @@ namespace GameInterface
                 FontSize = 28,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 10, 0, 10),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                BorderThickness = new Thickness(2)
             };
             playButton.Click += PlayButton_Click;
             Grid.SetRow(playButton, 1);
@@ -74,7 +78,11 @@ namespace GameInterface
                 FontSize = 28,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 10, 0, 10),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                BorderThickness = new Thickness(2)
             };
             controlsButton.Click += ControlsButton_Click;
             Grid.SetRow(controlsButton, 2);

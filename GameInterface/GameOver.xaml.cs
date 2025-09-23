@@ -63,7 +63,11 @@ namespace GameInterface
                 FontSize = 28,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 10, 0, 10),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                BorderThickness = new Thickness(2)
             };
             retryButton.Click += RetryButton_Click;
             Grid.SetRow(retryButton, 1);
@@ -75,7 +79,11 @@ namespace GameInterface
                 FontSize = 28,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 10, 0, 10),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                BorderThickness = new Thickness(2)
             };
             menuButton.Click += MenuButton_Click;
             Grid.SetRow(menuButton, 2);
@@ -87,7 +95,11 @@ namespace GameInterface
                 FontSize = 28,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 10, 0, 10)
+                Margin = new Thickness(0, 10, 0, 10),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                BorderThickness = new Thickness(2)
             };
             exitButton.Click += ExitButton_Click;
             Grid.SetRow(exitButton, 3);
