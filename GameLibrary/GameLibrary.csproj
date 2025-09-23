@@ -120,8 +120,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GamePiece.cs" />
-    <Compile Include="Projectile.cs" />
+    <Compile Include="Managers\EnemyManager.cs" />
+    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Entities\GamePiece.cs" />
+    <Compile Include="Managers\HealthBarManager.cs" />
+    <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Entities\Projectile.cs" />
+    <Compile Include="Managers\ProjectileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GameLibrary.rd.xml" />
   </ItemGroup>
