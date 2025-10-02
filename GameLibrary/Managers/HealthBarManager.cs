@@ -46,7 +46,7 @@ namespace GameLibrary
         // Method to update health bar based on player's health
         public void UpdateHealthBar(int playerHealth, int maxHealth)
         {
-            double percent = System.Math.Max(0, (double)playerHealth / maxHealth);
+            double percent = Math.Max(0, (double)playerHealth / maxHealth);
             healthBar.Width = 400 * percent;
         }
     }

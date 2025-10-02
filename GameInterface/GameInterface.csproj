@@ -138,7 +138,9 @@
   <ItemGroup>
     <Content Include="Assets\Collectible.png" />
     <Content Include="Assets\enemy.png" />
+    <Content Include="Assets\healthup.png" />
     <Content Include="Assets\player.png" />
+    <Content Include="Assets\powerup.png" />
     <Content Include="Assets\projectile.png" />
     <Content Include="Assets\retrolaser.wav" />
     <Content Include="Properties\Default.rd.xml" />

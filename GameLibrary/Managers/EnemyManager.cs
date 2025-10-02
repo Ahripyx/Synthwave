@@ -80,7 +80,7 @@ namespace GameLibrary
 
                 if (isColliding)
                 {
-                    playerManager.TakeDamage(10);
+                    playerManager.TakeDamage(1);
                     gridMain.Children.Remove(enemy.Image);
                     Enemies.Remove(enemy);
                 }

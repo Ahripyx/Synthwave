@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameLibrary.Managers;
 using Windows.Foundation;
 using Windows.Media.PlayTo;
 using Windows.UI.ViewManagement;
@@ -19,6 +20,8 @@ namespace GameLibrary
         public ProjectileManager Projectiles { get; }
         public HealthBarManager HealthBar { get; }
 
+        public CollectibleManager Collectibles { get; }
+
 
         // References to UI elements
         private readonly Grid gridMain;
@@ -28,6 +31,7 @@ namespace GameLibrary
         private DispatcherTimer gameTimer;
         private DispatcherTimer enemySpawnTimer;
         private DispatcherTimer projectileTimer;
+        private DispatcherTimer collectibleTimer;
 
         // Constructor
         public GameManager(Grid gridMain, Frame frame)
@@ -39,6 +43,7 @@ namespace GameLibrary
             Player = new PlayerManager(gridMain);
             Enemies = new EnemyManager(gridMain, Player);
             Projectiles = new ProjectileManager(gridMain, Player, Enemies);
+            Collectibles = new CollectibleManager(gridMain, Player, HealthBar);
 
             SetupTimers();
         }
@@ -60,6 +65,11 @@ namespace GameLibrary
             projectileTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.5) };
             projectileTimer.Tick += (s, e) => Projectiles.FireProjectile();
             projectileTimer.Start();
+
+            // Collectible spawning
+            collectibleTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
+            collectibleTimer.Tick += (s, e) => Collectibles.SpawnCollectible();
+            collectibleTimer.Start();
         }
 
         // Method to stop all timers
@@ -68,6 +78,7 @@ namespace GameLibrary
             gameTimer.Stop();
             enemySpawnTimer.Stop();
             projectileTimer.Stop();
+            collectibleTimer.Stop();
         }
 
 
@@ -81,6 +92,7 @@ namespace GameLibrary
             Projectiles.UpdateProjectiles();
             Player.UpdatePlayerMovement();
             Enemies.UpdateEnemies();
+            Collectibles.UpdateCollectibles();
 
             HealthBar.UpdateHealthBar(Player.Health, Player.MaxHealth);
 

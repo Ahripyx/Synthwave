@@ -14,8 +14,8 @@ namespace GameLibrary
     {
         // Player properties
         public GamePiece Player { get; }
-        public int Health { get; private set; } = 100;
-        public int MaxHealth { get; } = 100;
+        public int Health { get; private set; } = 3;
+        public int MaxHealth { get; } = 3;
 
         // References
         private readonly Grid gridMain;
@@ -45,6 +45,13 @@ namespace GameLibrary
         {
             Health -= amount;
             if (Health < 0) Health = 0;
+        }
+
+        // Method to heal the player
+        public void Heal(int amount)
+        {
+            Health += amount;
+            if (Health > MaxHealth) Health = MaxHealth;
         }
 
 

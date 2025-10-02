@@ -120,6 +120,8 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Entities\Collectible.cs" />
+    <Compile Include="Managers\CollectibleManager.cs" />
     <Compile Include="Managers\EnemyManager.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Entities\GamePiece.cs" />
