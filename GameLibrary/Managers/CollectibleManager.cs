@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameLibrary.Entities;
 using Windows.Gaming.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace GameLibrary.Managers
@@ -18,12 +19,14 @@ namespace GameLibrary.Managers
         private readonly List<Collectible> collectibles = new List<Collectible>();
 
         private readonly HealthBarManager healthBarManager;
+        private readonly GameManager gameManager;
 
-        public CollectibleManager(Grid gridMain, PlayerManager playerManager, HealthBarManager healthBarManager)
+        public CollectibleManager(Grid gridMain, PlayerManager playerManager, HealthBarManager healthBarManager, GameManager gameManager)
         {
             this.gridMain = gridMain;
             this.playerManager = playerManager;
             this.healthBarManager = healthBarManager;
+            this.gameManager = gameManager;
         }
 
         public void SpawnCollectible()
@@ -74,6 +77,17 @@ namespace GameLibrary.Managers
                     playerManager.Heal(20);
                     healthBarManager.UpdateHealthBar(playerManager.Health, playerManager.MaxHealth);
                 }
+            }
+            else if (collectible.Type == "powerup")
+            {
+                gameManager.SetProjectileFireInterval(TimeSpan.FromSeconds(0.166));
+                var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
+                timer.Tick += (s, e) =>
+                {
+                    timer.Stop();
+                    gameManager.SetProjectileFireInterval(TimeSpan.FromSeconds(0.5));
+                };
+                timer.Start();
             }
         }
 

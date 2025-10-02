@@ -43,7 +43,7 @@ namespace GameLibrary
             Player = new PlayerManager(gridMain);
             Enemies = new EnemyManager(gridMain, Player);
             Projectiles = new ProjectileManager(gridMain, Player, Enemies);
-            Collectibles = new CollectibleManager(gridMain, Player, HealthBar);
+            Collectibles = new CollectibleManager(gridMain, Player, HealthBar, this);
 
             SetupTimers();
         }
@@ -107,5 +107,12 @@ namespace GameLibrary
         public void OnKeyDown(Windows.System.VirtualKey key) => Player.OnKeyDown(key);
         public void OnKeyUp(Windows.System.VirtualKey key) => Player.OnKeyUp(key);
         public void OnPointerMoved(Point mousePos) => Projectiles.SetMousePosition(mousePos);
+
+        public void SetProjectileFireInterval(TimeSpan interval)
+        {
+            projectileTimer.Stop();
+            projectileTimer.Interval = interval;
+            projectileTimer.Start();
+        }
     }
 }
