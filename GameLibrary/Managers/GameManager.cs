@@ -13,18 +13,23 @@ namespace GameLibrary
 {
     public class GameManager
     {
+        // Referencing Managers
         public PlayerManager Player { get; }
         public EnemyManager Enemies { get; }
         public ProjectileManager Projectiles { get; }
         public HealthBarManager HealthBar { get; }
 
+
+        // References to UI elements
         private readonly Grid gridMain;
         private readonly Frame frame;
 
+        // Timers
         private DispatcherTimer gameTimer;
         private DispatcherTimer enemySpawnTimer;
         private DispatcherTimer projectileTimer;
 
+        // Constructor
         public GameManager(Grid gridMain, Frame frame)
         {
             this.gridMain = gridMain;
@@ -38,6 +43,7 @@ namespace GameLibrary
             SetupTimers();
         }
 
+        // Timer setup method
         private void SetupTimers()
         {
             // Game loop
@@ -56,6 +62,7 @@ namespace GameLibrary
             projectileTimer.Start();
         }
 
+        // Method to stop all timers
         private void StopAllTimers()
         {
             gameTimer.Stop();
@@ -63,8 +70,12 @@ namespace GameLibrary
             projectileTimer.Stop();
         }
 
+
+        // Main game loop method
         public event Action GameOver;
 
+
+        // Main game loop method
         private void GameLoop()
         {
             Projectiles.UpdateProjectiles();
@@ -80,6 +91,7 @@ namespace GameLibrary
             }
         }
 
+        // Input handling methods
         public void OnKeyDown(Windows.System.VirtualKey key) => Player.OnKeyDown(key);
         public void OnKeyUp(Windows.System.VirtualKey key) => Player.OnKeyUp(key);
         public void OnPointerMoved(Point mousePos) => Projectiles.SetMousePosition(mousePos);

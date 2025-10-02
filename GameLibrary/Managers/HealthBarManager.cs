@@ -12,9 +12,11 @@ namespace GameLibrary
 {
     public class HealthBarManager
     {
+        // UI Elements
         private readonly Rectangle healthBarBackground;
         private readonly Rectangle healthBar;
 
+        // Constructor
         public HealthBarManager(Grid gridMain)
         {
             healthBarBackground = new Rectangle
@@ -41,6 +43,7 @@ namespace GameLibrary
             gridMain.Children.Add(healthBar);
         }
 
+        // Method to update health bar based on player's health
         public void UpdateHealthBar(int playerHealth, int maxHealth)
         {
             double percent = System.Math.Max(0, (double)playerHealth / maxHealth);

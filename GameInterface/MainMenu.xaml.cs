@@ -26,6 +26,7 @@ namespace GameInterface
         {
             this.InitializeComponent();
 
+            // Creating the main grid layout
             var grid = new Grid
             {
                 Background = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x18, 0x1A, 0x20)),
@@ -33,6 +34,7 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
+            // Defining rows and columns
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -42,6 +44,8 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+
+            // Creating title and buttons
             var title = new TextBlock
             {
                 Text = "Synthwave",
@@ -95,6 +99,8 @@ namespace GameInterface
             this.Content = grid;
         }
 
+
+        // Button event handlers
         private void ControlsButton_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();

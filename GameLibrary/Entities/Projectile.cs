@@ -4,6 +4,7 @@ namespace GameLibrary
 {
     public class Projectile
     {
+        // Properties
         public Image Image;
         public double X, Y;
         public double VelocityX, VelocityY;

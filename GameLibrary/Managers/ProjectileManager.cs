@@ -14,13 +14,16 @@ namespace GameLibrary
 {
     public class ProjectileManager
     {
+        // References to other managers
         private readonly Grid gridMain;
         private readonly PlayerManager playerManager;
         private readonly EnemyManager enemyManager;
 
+        // Projectile list and mouse position
         private readonly List<Projectile> projectiles = new List<Projectile>();
         private Point mousePosition;
 
+        // Constructor
         public ProjectileManager(Grid gridMain, PlayerManager playerManager, EnemyManager enemyManager)
         {
             this.gridMain = gridMain;
@@ -29,8 +32,11 @@ namespace GameLibrary
             mousePosition = new Point(playerManager.Player.Left, playerManager.Player.Top);
         }
 
+
+        // Method to set mouse position
         public void SetMousePosition(Point pos) => mousePosition = pos;
 
+        // Method to fire a projectile
         public void FireProjectile()
         {
             if (mousePosition == null || playerManager.Player == null) return;
@@ -77,6 +83,8 @@ namespace GameLibrary
             projectiles.Add(new Projectile { Image = projImage, X = playerX, Y = playerY, VelocityX = velocityX, VelocityY = velocityY });
         }
 
+
+        // Method to update projectile positions and check for collisions
         public void UpdateProjectiles()
         {
             for (int i = projectiles.Count - 1; i >= 0; i--)

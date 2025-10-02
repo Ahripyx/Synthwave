@@ -10,18 +10,25 @@ namespace GameLibrary
 {
     public class EnemyManager
     {
+        // References
         private readonly Grid gridMain;
         private readonly PlayerManager playerManager;
         private readonly Random rng = new Random();
 
+        // Enemy list
+
         public List<GamePiece> Enemies { get; } = new List<GamePiece>();
 
+
+        // Constructor
         public EnemyManager(Grid gridMain, PlayerManager playerManager)
         {
             this.gridMain = gridMain;
             this.playerManager = playerManager;
         }
 
+
+        // Method for spawning enemies
         public void SpawnEnemy()
         {
             int enemySize = 48;
@@ -60,6 +67,7 @@ namespace GameLibrary
             removalTimer.Start();
         }
 
+        // Method for updating enemy positions and checking collisions
         public void UpdateEnemies()
         {
             foreach (var enemy in Enemies.ToList())
@@ -79,6 +87,7 @@ namespace GameLibrary
             }
         }
 
+        // Method to check if a projectile hits any enemy
         public bool CheckProjectileHit(GameLibrary.Projectile proj)
         {
             for (int j = Enemies.Count - 1; j >= 0; j--)
@@ -95,6 +104,8 @@ namespace GameLibrary
             return false;
         }
 
+
+        // Helper method to create a game piece
         private GamePiece CreatePiece(string imgSrc, int size, int left, int top)
         {
             Image img = new Image
@@ -110,6 +121,8 @@ namespace GameLibrary
             return new GamePiece(img);
         }
 
+
+        // Helper method to check rectangle overlap
         private bool RectsOverlap(double x1, double y1, double w1, double h1,
                                   double x2, double y2, double w2, double h2)
         {

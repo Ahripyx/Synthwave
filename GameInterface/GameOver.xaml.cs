@@ -26,6 +26,7 @@ namespace GameInterface
         {
             this.InitializeComponent();
 
+            // Creating new grid
             var grid = new Grid
             {
                 Background = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x18, 0x1A, 0x20)),
@@ -33,6 +34,7 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
+            // Defining rows and columns
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -43,6 +45,7 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+            // Creating title and buttons
             var title = new TextBlock
             {
                 Text = "Game Over",
@@ -114,6 +117,7 @@ namespace GameInterface
 
         }
 
+        // Button event handlers
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Exit();

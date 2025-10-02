@@ -14,20 +14,24 @@ namespace GameLibrary
 {
     public class GamePiece
     {
+
+        // Fields
         private Thickness objectMargins;
         private Image onScreen;
         public Thickness Location => onScreen.Margin;
         public double Width => onScreen.Width;
         public double Height => onScreen.Height;
 
+
+        // Constructor
         public GamePiece(Image img)
         {
             onScreen = img;
             objectMargins = img.Margin;
         }
-
         public Image Image => onScreen;
 
+        // Player movement method
         public bool Move(HashSet<VirtualKey> directions, double containerWidth, double containerHeight)
         {
             bool moved = false;
@@ -53,6 +57,7 @@ namespace GameLibrary
             return moved;
         }
 
+        // Properties for position
         public double Left
         {
             get => objectMargins.Left;
@@ -65,6 +70,8 @@ namespace GameLibrary
             set { objectMargins.Top = value; onScreen.Margin = objectMargins; }
         }
 
+
+        // Method to set position directly
         public void SetPosition(double left, double top)
         {
             objectMargins.Left = left;
@@ -72,6 +79,8 @@ namespace GameLibrary
             onScreen.Margin = objectMargins;
         }
 
+
+        // Method to move towards the player
         public void MoveTowards(double targetX, double targetY, double speed)
         {
             double dx = targetX - this.Left;

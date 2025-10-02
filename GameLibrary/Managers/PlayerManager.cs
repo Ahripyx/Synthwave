@@ -12,33 +12,43 @@ namespace GameLibrary
 {
     public class PlayerManager
     {
+        // Player properties
         public GamePiece Player { get; }
         public int Health { get; private set; } = 100;
         public int MaxHealth { get; } = 100;
 
+        // References
         private readonly Grid gridMain;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
 
+
+        // Constructor
         public PlayerManager(Grid gridMain)
         {
             this.gridMain = gridMain;
             Player = CreatePiece("player", 48, 50, 50);
         }
 
+        // Key event handlers
         public void OnKeyDown(VirtualKey key) => pressedKeys.Add(key);
         public void OnKeyUp(VirtualKey key) => pressedKeys.Remove(key);
 
+        // Method to update player movement
         public void UpdatePlayerMovement()
         {
             Player.Move(pressedKeys, gridMain.ActualWidth, gridMain.ActualHeight);
         }
 
+
+        // Method to apply damage to the player
         public void TakeDamage(int amount)
         {
             Health -= amount;
             if (Health < 0) Health = 0;
         }
 
+
+        // Helper method to create a game piece
         private GamePiece CreatePiece(string imgSrc, int size, int left, int top)
         {
             Image img = new Image
