@@ -110,7 +110,7 @@ namespace GameLibrary
         {
             Image img = new Image
             {
-                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri($"ms-appx:///Assets/{imgSrc}.png")),
+                Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri($"ms-appx:///Assets/{imgSrc}.png")),
                 Width = size,
                 Height = size,
                 Margin = new Windows.UI.Xaml.Thickness(left, top, 0, 0),

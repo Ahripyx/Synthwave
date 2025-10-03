@@ -32,6 +32,11 @@ namespace GameLibrary
         private DispatcherTimer enemySpawnTimer;
         private DispatcherTimer projectileTimer;
         private DispatcherTimer collectibleTimer;
+        private DispatcherTimer enemySpawnAccelerateTimer;
+
+        private double enemySpawnInterval = 2.0;
+        private const double MinEnemySpawnInterval = 0.3;
+        private const double EnemySpawnDecrement = 0.2;
 
         // Constructor
         public GameManager(Grid gridMain, Frame frame)
@@ -57,9 +62,20 @@ namespace GameLibrary
             gameTimer.Start();
 
             // Enemy spawning
-            enemySpawnTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+            enemySpawnTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(enemySpawnInterval) };
             enemySpawnTimer.Tick += (s, e) => Enemies.SpawnEnemy();
             enemySpawnTimer.Start();
+
+            // Enemy spawn acceleration
+            enemySpawnAccelerateTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
+            enemySpawnAccelerateTimer.Tick += (s, e) =>
+            {
+                enemySpawnInterval = Math.Max(MinEnemySpawnInterval, enemySpawnInterval - EnemySpawnDecrement);
+                enemySpawnTimer.Stop();
+                enemySpawnTimer.Interval = TimeSpan.FromSeconds(enemySpawnInterval);
+                enemySpawnTimer.Start();
+            };
+            enemySpawnAccelerateTimer.Start();
 
             // Projectile firing
             projectileTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.5) };
@@ -67,7 +83,7 @@ namespace GameLibrary
             projectileTimer.Start();
 
             // Collectible spawning
-            collectibleTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
+            collectibleTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
             collectibleTimer.Tick += (s, e) => Collectibles.SpawnCollectible();
             collectibleTimer.Start();
         }
@@ -77,6 +93,7 @@ namespace GameLibrary
         {
             gameTimer.Stop();
             enemySpawnTimer.Stop();
+            enemySpawnAccelerateTimer.Stop();
             projectileTimer.Stop();
             collectibleTimer.Stop();
         }
