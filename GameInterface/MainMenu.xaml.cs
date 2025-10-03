@@ -103,7 +103,7 @@ namespace GameInterface
         // Button event handlers
         private void ControlsButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Frame.Navigate(typeof(Controls));
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
