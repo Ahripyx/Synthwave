@@ -12,6 +12,7 @@ namespace GameLibrary.Managers
 {
     public class CollectibleManager
     {
+        // References to UI elements and other managers
         private readonly Grid gridMain;
         private readonly PlayerManager playerManager;
         private readonly Random rng = new Random();
@@ -21,6 +22,7 @@ namespace GameLibrary.Managers
         private readonly HealthBarManager healthBarManager;
         private readonly GameManager gameManager;
 
+        // Constructor
         public CollectibleManager(Grid gridMain, PlayerManager playerManager, HealthBarManager healthBarManager, GameManager gameManager)
         {
             this.gridMain = gridMain;
@@ -29,6 +31,7 @@ namespace GameLibrary.Managers
             this.gameManager = gameManager;
         }
 
+        // Method to spawn a collectible
         public void SpawnCollectible()
         {
             string type = collectibleTypes[rng.Next(collectibleTypes.Length)];
@@ -41,15 +44,16 @@ namespace GameLibrary.Managers
                 Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri($"ms-appx:///Assets/{type}.png")),
                 Width = size,
                 Height = size,
-                Margin = new Windows.UI.Xaml.Thickness(x, y, 0, 0),
-                VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Top,
-                HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Left
+                Margin = new Thickness(x, y, 0, 0),
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             gridMain.Children.Add(img);
             var piece = new GamePiece(img);
             collectibles.Add(new Collectible(piece, type));
         }
 
+        // Method to update collectibles (check for collisions)
         public void UpdateCollectibles()
         {
             for (int i = collectibles.Count - 1; i >= 0; i--)
@@ -66,6 +70,7 @@ namespace GameLibrary.Managers
             }
         }
 
+        // Event handler for when a collectible is picked up
         private void OnCollectiblePickedUp(Collectible collectible)
         {
 
@@ -91,6 +96,7 @@ namespace GameLibrary.Managers
             }
         }
 
+        // Helper method to check rectangle overlap
         private bool RectsOverlap(double x1, double y1, double w1, double h1,
                                   double x2, double y2, double w2, double h2)
         {

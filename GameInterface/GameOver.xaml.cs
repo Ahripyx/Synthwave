@@ -29,7 +29,6 @@ namespace GameInterface
             // Creating new grid
             var grid = new Grid
             {
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x18, 0x1A, 0x20)),
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
@@ -108,6 +107,7 @@ namespace GameInterface
             Grid.SetRow(exitButton, 3);
             Grid.SetColumn(exitButton, 1);
 
+            // Adding elements to grid
             grid.Children.Add(title);
             grid.Children.Add(retryButton);
             grid.Children.Add(menuButton);

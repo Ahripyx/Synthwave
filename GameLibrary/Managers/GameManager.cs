@@ -125,6 +125,7 @@ namespace GameLibrary
         public void OnKeyUp(Windows.System.VirtualKey key) => Player.OnKeyUp(key);
         public void OnPointerMoved(Point mousePos) => Projectiles.SetMousePosition(mousePos);
 
+        // Method to adjust projectile firing interval
         public void SetProjectileFireInterval(TimeSpan interval)
         {
             projectileTimer.Stop();

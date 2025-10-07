@@ -38,6 +38,13 @@ namespace GameInterface
             ApplicationView.PreferredLaunchViewSize = new Size(1152, 648);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            // Handle window size changes to keep gridMain centered
+            Window.Current.SizeChanged += (s, e) =>
+            {
+                gridMain.HorizontalAlignment = HorizontalAlignment.Center;
+                gridMain.VerticalAlignment = VerticalAlignment.Center;
+            };
+
             // Initialize game manager
             gameManager = new GameManager(gridMain, Frame);
 

@@ -26,18 +26,21 @@ namespace GameInterface
         {
             this.InitializeComponent();
 
+            // Creating new grid
             var grid = new Grid
             {
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x18, 0x1A, 0x20)),
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }); // Back button
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // Content
 
+            // Defining rows and columns
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }); 
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); 
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
+
+            // Creating Back button
             var backButton = new Button
             {
                 Content = "<- Back",
@@ -54,6 +57,8 @@ namespace GameInterface
             Grid.SetRow(backButton, 0);
             Grid.SetColumn(backButton, 0);
 
+
+            // Creating StackPanel for content
             var stackPanel = new StackPanel
             {
                 VerticalAlignment = VerticalAlignment.Top,
@@ -62,6 +67,7 @@ namespace GameInterface
                 Margin = new Thickness(0, 40, 0, 0)
             };
 
+            // Title
             var title = new TextBlock
             {
                 Text = "Game Controls",
@@ -72,6 +78,7 @@ namespace GameInterface
                 Margin = new Thickness(0, 0, 0, 30)
             };
 
+            // Adding title and controls to StackPanel
             stackPanel.Children.Add(title);
 
             stackPanel.Children.Add(CreateControlText("Move Up:", "W or Up-Arrow"));
@@ -89,11 +96,13 @@ namespace GameInterface
             this.Content = grid;
         }
 
+        // Event handler for Back button
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainMenu));
         }
 
+        // Helper method to create control text blocks
         private StackPanel CreateControlText(string action, string keys)
         {
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 };
