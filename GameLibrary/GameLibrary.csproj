@@ -131,6 +131,7 @@
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Managers\ProjectileManager.cs" />
+    <Compile Include="Managers\ScoreManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\GameLibrary.rd.xml" />
   </ItemGroup>

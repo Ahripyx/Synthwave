@@ -39,11 +39,10 @@ namespace GameLibrary
         private const double MinEnemySpawnInterval = 0.3;
         private const double EnemySpawnDecrement = 0.2;
 
-        private int score;
-        public int Score => score;
+        private readonly ScoreManager scoreManager;
+        public int Score => scoreManager.Score;
 
 
-        private TextBlock scoreText;
         // Constructor
         public GameManager(Grid gridMain, Frame frame)
         {
@@ -56,14 +55,12 @@ namespace GameLibrary
             Projectiles = new ProjectileManager(gridMain, Player, Enemies);
             Collectibles = new CollectibleManager(gridMain, Player, HealthBar, this);
 
+            scoreManager = new ScoreManager(10, 5, 2000);
 
-            Enemies.EnemyKilled += () =>
-            {
-                score += 10;
-                UpdateScoreText();
-            };
+            Enemies.EnemyKilled += () => scoreManager.RegisterKill();
 
-            UpdateScoreText();
+            Player.Damaged += () => scoreManager.ResetCombo();
+            //UpdateScoreText();
 
             SetupTimers();
         }
@@ -71,9 +68,8 @@ namespace GameLibrary
         // Allow the page to provide the TextBlock that will display the score.
         public void RegisterScoreTextBlock(TextBlock tb)
         {
-            scoreText = tb ?? throw new ArgumentNullException(nameof(tb));
-            // don't call Panel.ZIndexProperty here — add HUD container from the page instead
-            UpdateScoreText();
+            if (tb == null) throw new ArgumentNullException(nameof(tb));
+            scoreManager.RegisterScoreTextBlock(tb);
         }
 
         // Timer setup method
@@ -139,7 +135,7 @@ namespace GameLibrary
             if (Player.Health <= 0)
             {
                 StopAllTimers();
-                GameOver?.Invoke(score);
+                GameOver?.Invoke(scoreManager.Score);
             }
         }
 
@@ -154,14 +150,6 @@ namespace GameLibrary
             projectileTimer.Stop();
             projectileTimer.Interval = interval;
             projectileTimer.Start();
-        }
-
-        private void UpdateScoreText()
-        {
-            if (scoreText != null)
-            {
-                scoreText.Text = $"Score: {score}";
-            }
         }
     }
 }

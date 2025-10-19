@@ -21,6 +21,7 @@ namespace GameLibrary
         private readonly Grid gridMain;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
 
+        public event Action Damaged;
 
         // Constructor
         public PlayerManager(Grid gridMain)
@@ -45,6 +46,7 @@ namespace GameLibrary
         {
             Health -= amount;
             if (Health < 0) Health = 0;
+            Damaged?.Invoke();
         }
 
         // Method to heal the player
