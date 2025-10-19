@@ -126,10 +126,13 @@ namespace GameInterface
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Spacing = 8,
-                Margin = new Thickness(10, 8, 10, 8)
+                Margin = new Thickness(16, 140, 0, 0)
             };
-            Grid.SetRow(scoresPanel, 4);
-            Grid.SetColumn(scoresPanel, 1);
+            Grid.SetColumn(scoresPanel, 0);
+            Grid.SetRow(scoresPanel, 0);
+            Grid.SetRowSpan(scoresPanel, 5);
+            Grid.SetColumnSpan(scoresPanel, 1);
+
             grid.Children.Add(scoresPanel);
 
             this.Content = grid;
@@ -170,26 +173,28 @@ namespace GameInterface
             scoresPanel.Children.Add(new TextBlock
             {
                 Text = "High Scores",
-                FontSize = 32,
-                FontWeight = Windows.UI.Text.FontWeights.Bold,
+                FontSize = 18,
+                FontWeight = Windows.UI.Text.FontWeights.SemiBold,
                 Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x70, 0xFF, 0xAF)),
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(4, 0, 0, 4)
             });
 
             if (!highScoreManager.Entries.Any())
             {
-                scoresPanel.Children.Add(new TextBlock { Text = "No high scores yet.", FontSize = 20, HorizontalAlignment = HorizontalAlignment.Center });
+                scoresPanel.Children.Add(new TextBlock { Text = "No high scores yet.", FontSize = 14, HorizontalAlignment = HorizontalAlignment.Center });
             }
             else
             {
                 int rank = 1;
-                foreach (var e in highScoreManager.Entries)
+                foreach (var e in highScoreManager.Entries.Take(5))
                 {
                     scoresPanel.Children.Add(new TextBlock
                     {
                         Text = $"{rank}. {e.Name} — {e.Score}",
                         FontSize = 20,
-                        HorizontalAlignment = HorizontalAlignment.Center
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Margin = new Thickness(6, 2, 0, 0)
                     });
                     rank++;
                 }
@@ -200,33 +205,36 @@ namespace GameInterface
                 scoresPanel.Children.Add(new TextBlock
                 {
                     Text = $"Your Score: {pendingScore.Value}",
-                    FontSize = 20,
-                    Margin = new Thickness(0, 8, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
+                    FontSize = 14,
+                    Margin = new Thickness(6, 8, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Left
                 });
 
                 var nameBox = new TextBox
                 {
                     PlaceholderText = "Enter your name",
                     Text = "Player",
-                    FontSize = 240,
-                    HorizontalAlignment = HorizontalAlignment.Center,
+                    FontSize = 14,
+                    Width = 280,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(0, 6, 0, 0)
                 };
                 scoresPanel.Children.Add(nameBox);
 
                 var saveButton = new Button
                 {
                     Content = "Save Score",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 6, 0, 0)
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(0, 6, 0, 0),
+                    Width = 120
                 };
                 scoresPanel.Children.Add(saveButton);
 
                 var resultText = new TextBlock
                 {
-                    FontSize = 18,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 6, 0, 0)
+                    FontSize = 14,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(6, 6, 0, 0)
                 };
                 scoresPanel.Children.Add(resultText);
 
