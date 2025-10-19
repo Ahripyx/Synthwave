@@ -9,6 +9,7 @@ using Windows.Media.PlayTo;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace GameLibrary
 {
@@ -38,6 +39,11 @@ namespace GameLibrary
         private const double MinEnemySpawnInterval = 0.3;
         private const double EnemySpawnDecrement = 0.2;
 
+        private int score;
+        public int Score => score;
+
+
+        private TextBlock scoreText;
         // Constructor
         public GameManager(Grid gridMain, Frame frame)
         {
@@ -50,7 +56,24 @@ namespace GameLibrary
             Projectiles = new ProjectileManager(gridMain, Player, Enemies);
             Collectibles = new CollectibleManager(gridMain, Player, HealthBar, this);
 
+
+            Enemies.EnemyKilled += () =>
+            {
+                score += 10;
+                UpdateScoreText();
+            };
+
+            UpdateScoreText();
+
             SetupTimers();
+        }
+
+        // Allow the page to provide the TextBlock that will display the score.
+        public void RegisterScoreTextBlock(TextBlock tb)
+        {
+            scoreText = tb ?? throw new ArgumentNullException(nameof(tb));
+            // don't call Panel.ZIndexProperty here — add HUD container from the page instead
+            UpdateScoreText();
         }
 
         // Timer setup method
@@ -100,7 +123,7 @@ namespace GameLibrary
 
 
         // Main game loop method
-        public event Action GameOver;
+        public event Action<int> GameOver;
 
 
         // Main game loop method
@@ -116,7 +139,7 @@ namespace GameLibrary
             if (Player.Health <= 0)
             {
                 StopAllTimers();
-                GameOver?.Invoke();
+                GameOver?.Invoke(score);
             }
         }
 
@@ -131,6 +154,14 @@ namespace GameLibrary
             projectileTimer.Stop();
             projectileTimer.Interval = interval;
             projectileTimer.Start();
+        }
+
+        private void UpdateScoreText()
+        {
+            if (scoreText != null)
+            {
+                scoreText.Text = $"Score: {score}";
+            }
         }
     }
 }

@@ -48,10 +48,34 @@ namespace GameInterface
             // Initialize game manager
             gameManager = new GameManager(gridMain, Frame);
 
-            gameManager.GameOver += () =>
+            var hud = new Grid
             {
-                Frame.Navigate(typeof(GameOver));
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                IsHitTestVisible = false // don't block input
             };
+
+            var scoreText = new TextBlock
+            {
+                Text = "Score: 0",
+                FontSize = 20,
+                Foreground = new SolidColorBrush(Windows.UI.Colors.Black),
+                Margin = new Thickness(10, 10, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                IsHitTestVisible = false
+            };
+            hud.Children.Add(scoreText);
+
+            gridMain.Children.Add(hud);
+
+            gameManager.RegisterScoreTextBlock(scoreText);
+
+            gameManager.GameOver += (finalScore) =>
+            {
+                Frame.Navigate(typeof(GameOver), finalScore);
+            };
+
             // Event handlers
             Window.Current.CoreWindow.KeyDown += (s, e) => gameManager.OnKeyDown(e.VirtualKey);
             Window.Current.CoreWindow.KeyUp += (s, e) => gameManager.OnKeyUp(e.VirtualKey);

@@ -19,6 +19,8 @@ namespace GameLibrary
 
         public List<GamePiece> Enemies { get; } = new List<GamePiece>();
 
+        public event Action EnemyKilled;
+
 
         // Constructor
         public EnemyManager(Grid gridMain, PlayerManager playerManager)
@@ -98,6 +100,9 @@ namespace GameLibrary
                 {
                     gridMain.Children.Remove(enemy.Image);
                     Enemies.RemoveAt(j);
+
+                    EnemyKilled?.Invoke();
+
                     return true;
                 }
             }

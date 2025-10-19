@@ -121,11 +121,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Entities\Collectible.cs" />
+    <Compile Include="Entities\HighScore.cs" />
     <Compile Include="Managers\CollectibleManager.cs" />
     <Compile Include="Managers\EnemyManager.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Entities\GamePiece.cs" />
     <Compile Include="Managers\HealthBarManager.cs" />
+    <Compile Include="Managers\HighScoreManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Managers\ProjectileManager.cs" />

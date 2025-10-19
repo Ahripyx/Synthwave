@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using GameLibrary.Managers;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,6 +23,10 @@ namespace GameInterface
     /// </summary>
     public sealed partial class GameOver : Page
     {
+        private readonly HighScoreManager highScoreManager = new HighScoreManager();
+        private StackPanel scoresPanel;
+        private int? pendingScore;
+
         public GameOver()
         {
             this.InitializeComponent();
@@ -113,10 +118,111 @@ namespace GameInterface
             grid.Children.Add(menuButton);
             grid.Children.Add(exitButton);
 
+            //Scores panel
+            scoresPanel = new StackPanel
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Spacing = 8,
+                Margin = new Thickness(10, 8, 10, 8)
+            };
+            Grid.SetRow(scoresPanel, 4);
+            Grid.SetColumn(scoresPanel, 0);
+            grid.Children.Add(scoresPanel);
+
             this.Content = grid;
 
+            this.Loaded += async (s, e) =>
+            {
+                await highScoreManager.LoadAsync();
+            };
         }
 
+        private void RefreshScoresPanel()
+        {
+            scoresPanel.Children.Clear();
+
+            scoresPanel.Children.Add(new TextBlock
+            {
+                Text = "High Scores",
+                FontSize = 32,
+                FontWeight = Windows.UI.Text.FontWeights.Bold,
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x70, 0xFF, 0xAF)),
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
+
+            if (highScoreManager.Entries.Count == 0)
+            {
+                scoresPanel.Children.Add(new TextBlock
+                {
+                    Text = "No high scores yet.",
+                    FontSize = 20,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
+            }
+            else
+            {
+                int rank = 1;
+                foreach(var e in highScoreManager.Entries)
+                {
+                    scoresPanel.Children.Add(new TextBlock
+                    {
+                        Text = $"{rank}. {e.Name} — {e.Score}",
+                        FontSize = 20,
+                        HorizontalAlignment = HorizontalAlignment.Center
+                    });
+                    rank++;
+                }
+            }
+
+            if (pendingScore.HasValue)
+            {
+                scoresPanel.Children.Add(new TextBlock
+                {
+                    Text = $"Your Score: {pendingScore.Value}",
+                    FontSize = 20,
+                    Margin = new Thickness(0, 8, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
+
+                var nameBox = new TextBox
+                {
+                    PlaceholderText = "Enter your name",
+                    Text = "Player",
+                    FontSize = 240,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+                scoresPanel.Children.Add(nameBox);
+
+                var saveButton = new Button
+                {
+                    Content = "Save Score",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 6, 0, 0)
+                };
+                scoresPanel.Children.Add(saveButton);
+
+                var resultText = new TextBlock
+                {
+                    FontSize = 18,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Margin = new Thickness(0, 6, 0, 0)
+                };
+                scoresPanel.Children.Add(resultText);
+
+                saveButton.Click += async (s, e) =>
+                {
+                    saveButton.IsEnabled = false;
+                    string name = nameBox.Text;
+                    int newScore = pendingScore.Value;
+                    bool isTop = highScoreManager.AddScore(string.IsNullOrWhiteSpace(name) ? "Player" : name, newScore);
+                    await highScoreManager.SaveAsync();
+                    resultText.Text = isTop ? "Congratulations — New High Score!" : "Score saved.";
+                    pendingScore = null;
+                    RefreshScoresPanel();
+                };
+            }
+        }
         // Button event handlers
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
