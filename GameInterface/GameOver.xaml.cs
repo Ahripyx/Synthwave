@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using GameLibrary.Managers;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -26,6 +27,7 @@ namespace GameInterface
         private readonly HighScoreManager highScoreManager = new HighScoreManager();
         private StackPanel scoresPanel;
         private int? pendingScore;
+        private bool scoresLoaded;
 
         public GameOver()
         {
@@ -127,17 +129,40 @@ namespace GameInterface
                 Margin = new Thickness(10, 8, 10, 8)
             };
             Grid.SetRow(scoresPanel, 4);
-            Grid.SetColumn(scoresPanel, 0);
+            Grid.SetColumn(scoresPanel, 1);
             grid.Children.Add(scoresPanel);
 
             this.Content = grid;
 
             this.Loaded += async (s, e) =>
             {
-                await highScoreManager.LoadAsync();
+                await LoadAndRefreshAsync();
             };
         }
 
+        // Ensure we capture navigation parameter (final score) and refresh UI
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (e.Parameter is int score)
+            {
+                pendingScore = score;
+            }
+
+            // If highscores already loaded, refresh now so the pending-score UI appears immediately
+            if (scoresLoaded)
+            {
+                RefreshScoresPanel();
+            }
+        }
+
+        // Combined load + refresh helper
+        private async Task LoadAndRefreshAsync()
+        {
+            await highScoreManager.LoadAsync();
+            scoresLoaded = true;
+            RefreshScoresPanel();
+        }
         private void RefreshScoresPanel()
         {
             scoresPanel.Children.Clear();
@@ -151,19 +176,14 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Center
             });
 
-            if (highScoreManager.Entries.Count == 0)
+            if (!highScoreManager.Entries.Any())
             {
-                scoresPanel.Children.Add(new TextBlock
-                {
-                    Text = "No high scores yet.",
-                    FontSize = 20,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                });
+                scoresPanel.Children.Add(new TextBlock { Text = "No high scores yet.", FontSize = 20, HorizontalAlignment = HorizontalAlignment.Center });
             }
             else
             {
                 int rank = 1;
-                foreach(var e in highScoreManager.Entries)
+                foreach (var e in highScoreManager.Entries)
                 {
                     scoresPanel.Children.Add(new TextBlock
                     {
