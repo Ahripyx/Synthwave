@@ -23,6 +23,8 @@ namespace GameLibrary
         private readonly List<Projectile> projectiles = new List<Projectile>();
         private Point mousePosition;
 
+        private readonly List<MediaPlayer> activeSfx = new List<MediaPlayer>();
+
         // Constructor
         public ProjectileManager(Grid gridMain, PlayerManager playerManager, EnemyManager enemyManager)
         {
@@ -45,7 +47,19 @@ namespace GameLibrary
             sfx.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/retrolaser.wav"));
             sfx.Volume = 0.1;
             sfx.Play();
-            sfx.MediaEnded += (snd, args) => sfx.Dispose();
+
+            activeSfx.Add(sfx);
+
+            // When finished remove from tracking and dispose
+            sfx.MediaEnded += (snd, args) =>
+            {
+                try
+                {
+                    sfx.Dispose();
+                }
+                catch { }
+                activeSfx.Remove(sfx);
+            };
 
             Image projImage = new Image
             {
