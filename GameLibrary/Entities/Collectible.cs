@@ -8,9 +8,11 @@ namespace GameLibrary.Entities
 {
     public class Collectible
     {
+        // Properties
         public GamePiece Piece { get; }
         public string Type { get; }
 
+        // Constructor
         public Collectible(GamePiece piece, string type)
         {
             Piece = piece;

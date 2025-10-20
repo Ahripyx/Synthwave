@@ -16,9 +16,9 @@ namespace GameLibrary
         private readonly Random rng = new Random();
 
         // Enemy list
-
         public List<GamePiece> Enemies { get; } = new List<GamePiece>();
 
+        // Event for when an enemy is killed
         public event Action EnemyKilled;
 
 

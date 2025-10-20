@@ -37,13 +37,16 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
+            /// Setting grid size
             grid.Width = 1152;
             grid.Height = 648;
 
-            double extraPadding = 80; // increase if still clipped, decrease if too large
+            // Setting preferred window size
+            double extraPadding = 80;
             var preferredWidth = grid.Width + extraPadding;
             var preferredHeight = grid.Height + extraPadding;
 
+            // Setting preferred launch size
             ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
@@ -57,10 +60,11 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+            // Defining brushes
             var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 46, 204, 113)); // mint/green
             var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
             var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
-            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30)); // dark border
 
             // Creating title and buttons
             var title = new TextBlock
@@ -84,9 +88,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = buttonBg,   // Neon Pink
-                Foreground = buttonFg,  // Neon Cyan
-                BorderBrush = buttonBorder, // Neon Yellow
+                Background = buttonBg,   
+                Foreground = buttonFg, 
+                BorderBrush = buttonBorder, 
                 BorderThickness = new Thickness(2)
             };
             playButton.Click += PlayButton_Click;
@@ -100,9 +104,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = buttonBg,   // Neon Pink
-                Foreground = buttonFg,  // Neon Cyan
-                BorderBrush = buttonBorder, // Neon Yellow
+                Background = buttonBg, 
+                Foreground = buttonFg, 
+                BorderBrush = buttonBorder,
                 BorderThickness = new Thickness(2)
             };
             controlsButton.Click += ControlsButton_Click;
@@ -114,9 +118,10 @@ namespace GameInterface
             grid.Children.Add(playButton);
             grid.Children.Add(controlsButton);
 
+            // Creating border around the grid
             var border = new Border
             {
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)), // dark border
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)),
                 BorderThickness = new Thickness(6),
                 CornerRadius = new CornerRadius(4),
                 Background = new SolidColorBrush(Windows.UI.Colors.White),

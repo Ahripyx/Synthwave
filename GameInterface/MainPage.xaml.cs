@@ -32,11 +32,12 @@ namespace GameInterface
         {
             this.InitializeComponent();
 
+            // Set up main grid
             gridMain.Width = 1152;
             gridMain.Height = 648;
 
             // Set grid size and preferred launch size
-            double extraPadding = 80; // increase if still clipped, decrease if too large
+            double extraPadding = 80; 
             var preferredWidth = gridMain.Width + extraPadding;
             var preferredHeight = gridMain.Height + extraPadding;
 
@@ -53,13 +54,15 @@ namespace GameInterface
             // Initialize game manager
             gameManager = new GameManager(gridMain, Frame);
 
+            // Set up HUD
             var hud = new Grid
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                IsHitTestVisible = false // don't block input
+                IsHitTestVisible = false
             };
 
+            // Score TextBlock
             var scoreText = new TextBlock
             {
                 Text = "Score: 0",
@@ -68,12 +71,13 @@ namespace GameInterface
                 Margin = new Thickness(10, 10, 40, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                MaxWidth = 300, // prevents overflow past right edge
+                MaxWidth = 300, 
                 IsHitTestVisible = false,
                 TextAlignment = TextAlignment.Right
             };
             hud.Children.Add(scoreText);
 
+            // Combo TextBlock
             var comboText = new TextBlock
             {
                 Text = string.Empty,
@@ -88,9 +92,11 @@ namespace GameInterface
 
             gridMain.Children.Add(hud);
 
+            // Register HUD elements with game manager
             gameManager.RegisterScoreTextBlock(scoreText);
             gameManager.RegisterComboTextBlock(comboText);
 
+            // Game over event
             gameManager.GameOver += (finalScore) =>
             {
                 Frame.Navigate(typeof(GameOver), finalScore);

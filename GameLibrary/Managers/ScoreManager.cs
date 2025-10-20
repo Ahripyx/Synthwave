@@ -10,26 +10,31 @@ namespace GameLibrary.Managers
 {
     public class ScoreManager
     {
-
+        // Properties
         private int score;
         public int Score => score;
 
+        // Combo properties
         private int comboCount;
         private readonly int basePoints;
         private readonly int comboStep;
 
+        // UI Elements
         private TextBlock scoreText;
         private TextBlock comboText;
 
+        // Events
         public event Action<int> ScoreChanged;
         public event Action<int> ComboChanged;
 
+        // Constructor
         public ScoreManager(int basePointsPerKill = 10, int comboStep = 5, int comboTimeoutMs = 2000)
         {
             this.basePoints = basePointsPerKill;
             this.comboStep = comboStep;
         }
 
+        // Register a kill and update score/combo
         public void RegisterKill()
         {
             comboCount++;
@@ -44,6 +49,7 @@ namespace GameLibrary.Managers
             UpdateComboText();
         }
 
+        // Reset score and combo
         public void Reset()
         {
             score = 0;
@@ -54,7 +60,7 @@ namespace GameLibrary.Managers
             UpdateComboText();
         }
 
-        // Public: reset only the combo (call when player takes damage)
+        // Reset only the combo
         public void ResetCombo()
         {
             comboCount = 0;
@@ -63,6 +69,7 @@ namespace GameLibrary.Managers
             UpdateScoreText();
         }
 
+        // Methods to register UI elements
         public void RegisterScoreTextBlock(TextBlock tb)
         {
             scoreText = tb;
@@ -76,6 +83,7 @@ namespace GameLibrary.Managers
             comboText.Text = string.Empty;
         }
 
+        // Private methods to update UI
         private void UpdateScoreText()
         {
             if (scoreText == null) return;

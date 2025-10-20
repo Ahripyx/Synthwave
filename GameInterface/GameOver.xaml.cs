@@ -30,7 +30,6 @@ namespace GameInterface
         private StackPanel scoresPanel;
         private int? pendingScore;
         private bool scoresLoaded;
-        private readonly Size GameSize = new Size(1152, 648);
         private Grid grid;
 
         public GameOver()
@@ -44,13 +43,16 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };
 
+            /// Setting grid size
             grid.Width = 1152;
             grid.Height = 648;
 
-            double extraPadding = 80; // increase if still clipped, decrease if too large
+            // Setting preferred window size
+            double extraPadding = 80; 
             var preferredWidth = grid.Width + extraPadding;
             var preferredHeight = grid.Height + extraPadding;
 
+            // Set preferred launch size
             ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
@@ -66,6 +68,7 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+            // Defining brushes
             var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 99, 100)); // coral/red for title
             var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
             var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
@@ -95,9 +98,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = buttonBg,   // Neon Pink
-                Foreground = buttonFg,  // Neon Cyan
-                BorderBrush = buttonBorder, // Neon Yellow
+                Background = buttonBg,
+                Foreground = buttonFg,
+                BorderBrush = buttonBorder, 
                 BorderThickness = new Thickness(2)
             };
             retryButton.Click += RetryButton_Click;
@@ -111,9 +114,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = buttonBg,   // Neon Pink
-                Foreground = buttonFg,  // Neon Cyan
-                BorderBrush = buttonBorder, // Neon Yellow
+                Background = buttonBg,  
+                Foreground = buttonFg,  
+                BorderBrush = buttonBorder, 
                 BorderThickness = new Thickness(2)
             };
             menuButton.Click += MenuButton_Click;
@@ -127,9 +130,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = buttonBg,   // Neon Pink
-                Foreground = buttonFg,  // Neon Cyan
-                BorderBrush = buttonBorder, // Neon Yellow
+                Background = buttonBg, 
+                Foreground = buttonFg, 
+                BorderBrush = buttonBorder, 
                 BorderThickness = new Thickness(2)
             };
             exitButton.Click += ExitButton_Click;
@@ -142,7 +145,7 @@ namespace GameInterface
             grid.Children.Add(menuButton);
             grid.Children.Add(exitButton);
 
-            //Scores panel
+            // Scores panel
             scoresPanel = new StackPanel
             {
                 VerticalAlignment = VerticalAlignment.Top,
@@ -157,9 +160,10 @@ namespace GameInterface
 
             grid.Children.Add(scoresPanel);
 
+            // Border around entire grid
             var border = new Border
             {
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)), // dark border
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)),
                 BorderThickness = new Thickness(6),
                 CornerRadius = new CornerRadius(4),
                 Background = new SolidColorBrush(Windows.UI.Colors.White),
@@ -176,7 +180,7 @@ namespace GameInterface
             };
         }
 
-        // Ensure we capture navigation parameter (final score) and refresh UI
+        // Handle navigation to this page
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -185,14 +189,13 @@ namespace GameInterface
                 pendingScore = score;
             }
 
-            // If highscores already loaded, refresh now so the pending-score UI appears immediately
             if (scoresLoaded)
             {
                 RefreshScoresPanel();
             }
         }
 
-        // Combined load + refresh helper
+        // Load scores and refresh panel
         private async Task LoadAndRefreshAsync()
         {
             await highScoreManager.LoadAsync();
@@ -203,10 +206,12 @@ namespace GameInterface
         {
             scoresPanel.Children.Clear();
 
-            var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
+            // Defining brushes
+            var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230)); 
             var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
             var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
 
+            // High Scores Heading
             scoresPanel.Children.Add(new TextBlock
             {
                 Text = "High Scores",
@@ -217,6 +222,7 @@ namespace GameInterface
                 Margin = new Thickness(4, 0, 0, 4)
             });
 
+            // High Score Entries
             if (!highScoreManager.Entries.Any())
             {
                 scoresPanel.Children.Add(new TextBlock { Text = "No high scores yet.", FontSize = 14, HorizontalAlignment = HorizontalAlignment.Center });
@@ -238,6 +244,7 @@ namespace GameInterface
                 }
             }
 
+            // Pending Score Entry
             if (pendingScore.HasValue)
             {
                 scoresPanel.Children.Add(new TextBlock

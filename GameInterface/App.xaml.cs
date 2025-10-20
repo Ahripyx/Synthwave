@@ -28,7 +28,6 @@ namespace GameInterface
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
-        /// 
         private MediaPlayer backgroundMusic;
         public App()
         {
@@ -36,6 +35,7 @@ namespace GameInterface
             this.Suspending += OnSuspending;
         }
 
+        // Starts playing background music in a loop with specified volume
         public void StartBackgroundMusic()
         {
             if (backgroundMusic != null) return;
@@ -46,11 +46,11 @@ namespace GameInterface
                 Volume = 0.15
             };
 
-            // Use the asset you added. Adjust volume if needed.
             backgroundMusic.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/WAV_Mega_G_loop.wav"));
             backgroundMusic.Play();
         }
 
+        // Stops and disposes of the background music player
         public void StopBackgroundMusic()
         {
             if (backgroundMusic == null) return;

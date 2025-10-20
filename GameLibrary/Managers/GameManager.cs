@@ -30,10 +30,12 @@ namespace GameLibrary
         private DispatcherTimer collectibleTimer;
         private DispatcherTimer enemySpawnAccelerateTimer;
 
+        // Enemy spawn control
         private double enemySpawnInterval = 2.0;
         private const double MinEnemySpawnInterval = 0.3;
         private const double EnemySpawnDecrement = 0.2;
 
+        // Score Manager
         private readonly ScoreManager scoreManager;
         public int Score => scoreManager.Score;
 
@@ -47,18 +49,13 @@ namespace GameLibrary
             Enemies = new EnemyManager(gridMain, Player);
             Projectiles = new ProjectileManager(gridMain, Player, Enemies);
             Collectibles = new CollectibleManager(gridMain, Player, HealthBar, this);
-
             scoreManager = new ScoreManager(10, 5, 2000);
-
             Enemies.EnemyKilled += () => scoreManager.RegisterKill();
-
             Player.Damaged += () => scoreManager.ResetCombo();
-            //UpdateScoreText();
-
             SetupTimers();
         }
 
-        // Allow the page to provide the TextBlock that will display the score.
+        // Methods to register UI elements for score display
         public void RegisterScoreTextBlock(TextBlock tb)
         {
             if (tb == null) throw new ArgumentNullException(nameof(tb));

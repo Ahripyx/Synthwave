@@ -36,20 +36,23 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
+            /// Setting grid size
             grid.Width = 1152;
             grid.Height = 648;
 
-            double extraPadding = 80; // increase if still clipped, decrease if too large
+            // Setting preferred window size
+            double extraPadding = 80; 
             var preferredWidth = grid.Width + extraPadding;
             var preferredHeight = grid.Height + extraPadding;
 
             ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            // Defining brushes
             var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 46, 204, 113)); // mint
             var backBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 60, 60, 60)); // dark grey
             var backFg = new SolidColorBrush(Windows.UI.Colors.White);
-            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30)); // dark border
 
             // Defining rows and columns
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }); 
@@ -110,9 +113,10 @@ namespace GameInterface
             grid.Children.Add(backButton);
             grid.Children.Add(stackPanel);
 
+            // Creating border around grid
             var border = new Border
             {
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)), // dark border
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)),
                 BorderThickness = new Thickness(6),
                 CornerRadius = new CornerRadius(4),
                 Background = new SolidColorBrush(Windows.UI.Colors.White),

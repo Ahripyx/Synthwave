@@ -21,6 +21,7 @@ namespace GameLibrary
         private readonly Grid gridMain;
         private readonly HashSet<VirtualKey> pressedKeys = new HashSet<VirtualKey>();
 
+        // Event for when the player takes damage
         public event Action Damaged;
 
         // Constructor

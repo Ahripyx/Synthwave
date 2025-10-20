@@ -8,6 +8,7 @@ namespace GameLibrary.Entities
 {
     public class HighScore
     {
+        // Properties
         public string Name { get; set; }
         public int Score { get; set; }
     }

@@ -15,7 +15,6 @@ namespace GameLibrary.Managers
         private const string FileName = "highscores.txt";
         private const int MaxEntries = 10;
         private readonly List<Entities.HighScore> entries = new List<HighScore>();
-
         public IReadOnlyList<HighScore> Entries => entries.AsReadOnly();
 
         public async Task LoadAsync()
@@ -49,21 +48,16 @@ namespace GameLibrary.Managers
             }
         }
 
+        // Save high scores to local storage
         public async Task SaveAsync()
         {
-            try
-            {
-                var folder = ApplicationData.Current.LocalFolder;
-                var file = await folder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);
-                var lines = entries.Select(e => $"{e.Name}|{e.Score}");
-                await FileIO.WriteTextAsync(file, string.Join(Environment.NewLine, lines));
-            }
-            catch
-            {
-                // Handle exceptions if necessary
-            }
+            var folder = ApplicationData.Current.LocalFolder;
+            var file = await folder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);
+            var lines = entries.Select(e => $"{e.Name}|{e.Score}");
+            await FileIO.WriteTextAsync(file, string.Join(Environment.NewLine, lines));
         }
 
+        // Add a new high score entry
         public bool AddScore(string name, int score)
         {
             if (string.IsNullOrWhiteSpace(name)) name = "Player";
