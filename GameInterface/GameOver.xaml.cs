@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GameLibrary.Managers;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -65,11 +66,18 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+            var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 99, 100)); // coral/red for title
+            var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
+            var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));   // dark border
+            var leftLabelBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 34, 139, 34)); // green for "High Scores" heading
+            var scoreTextBrush = new SolidColorBrush(Windows.UI.Colors.Black);
+
             // Creating title and buttons
             var title = new TextBlock
             {
                 Text = "Game Over",
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0xFF, 0x70, 0x70)),
+                Foreground = headingBrush,
                 FontSize = 60,
                 FontWeight = Windows.UI.Text.FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -87,9 +95,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                Background = buttonBg,   // Neon Pink
+                Foreground = buttonFg,  // Neon Cyan
+                BorderBrush = buttonBorder, // Neon Yellow
                 BorderThickness = new Thickness(2)
             };
             retryButton.Click += RetryButton_Click;
@@ -103,9 +111,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                Background = buttonBg,   // Neon Pink
+                Foreground = buttonFg,  // Neon Cyan
+                BorderBrush = buttonBorder, // Neon Yellow
                 BorderThickness = new Thickness(2)
             };
             menuButton.Click += MenuButton_Click;
@@ -119,9 +127,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                Background = buttonBg,   // Neon Pink
+                Foreground = buttonFg,  // Neon Cyan
+                BorderBrush = buttonBorder, // Neon Yellow
                 BorderThickness = new Thickness(2)
             };
             exitButton.Click += ExitButton_Click;
@@ -195,12 +203,16 @@ namespace GameInterface
         {
             scoresPanel.Children.Clear();
 
+            var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
+            var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
+
             scoresPanel.Children.Add(new TextBlock
             {
                 Text = "High Scores",
                 FontSize = 18,
                 FontWeight = Windows.UI.Text.FontWeights.SemiBold,
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x70, 0xFF, 0xAF)),
+                Foreground = new SolidColorBrush(Colors.Black),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = new Thickness(4, 0, 0, 4)
             });
@@ -219,7 +231,8 @@ namespace GameInterface
                         Text = $"{rank}. {e.Name} — {e.Score}",
                         FontSize = 20,
                         HorizontalAlignment = HorizontalAlignment.Left,
-                        Margin = new Thickness(6, 2, 0, 0)
+                        Margin = new Thickness(6, 2, 0, 0),
+                        Foreground = new SolidColorBrush(Windows.UI.Colors.Black)
                     });
                     rank++;
                 }
@@ -251,7 +264,10 @@ namespace GameInterface
                     Content = "Save Score",
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = new Thickness(0, 6, 0, 0),
-                    Width = 120
+                    Width = 120,
+                    Background = buttonBg,
+                    Foreground = buttonFg,
+                    BorderBrush = buttonBorder
                 };
                 scoresPanel.Children.Add(saveButton);
 

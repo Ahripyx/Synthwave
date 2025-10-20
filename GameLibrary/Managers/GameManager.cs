@@ -23,11 +23,6 @@ namespace GameLibrary
 
         public CollectibleManager Collectibles { get; }
 
-
-        // References to UI elements
-        private readonly Grid gridMain;
-        private readonly Frame frame;
-
         // Timers
         private DispatcherTimer gameTimer;
         private DispatcherTimer enemySpawnTimer;
@@ -46,8 +41,6 @@ namespace GameLibrary
         // Constructor
         public GameManager(Grid gridMain, Frame frame)
         {
-            this.gridMain = gridMain;
-            this.frame = frame;
 
             HealthBar = new HealthBarManager(gridMain);
             Player = new PlayerManager(gridMain);

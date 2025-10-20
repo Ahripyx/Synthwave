@@ -46,6 +46,10 @@ namespace GameInterface
             ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 46, 204, 113)); // mint
+            var backBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 60, 60, 60)); // dark grey
+            var backFg = new SolidColorBrush(Windows.UI.Colors.White);
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
 
             // Defining rows and columns
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }); 
@@ -61,9 +65,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(20, 20, 0, 0),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)),
+                Background = backBg,
+                Foreground = backFg,
+                BorderBrush = buttonBorder,
                 BorderThickness = new Thickness(2)
             };
             backButton.Click += BackButton_Click;
@@ -84,7 +88,7 @@ namespace GameInterface
             var title = new TextBlock
             {
                 Text = "Game Controls",
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x70, 0xFF, 0xAF)),
+                Foreground = headingBrush,
                 FontSize = 44,
                 FontWeight = Windows.UI.Text.FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -133,14 +137,14 @@ namespace GameInterface
             panel.Children.Add(new TextBlock
             {
                 Text = action,
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)),
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 68, 68, 68)),
                 FontSize = 26,
                 FontWeight = Windows.UI.Text.FontWeights.SemiBold
             });
             panel.Children.Add(new TextBlock
             {
                 Text = keys,
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),
+                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 160, 195)),
                 FontSize = 26
             });
             return panel;

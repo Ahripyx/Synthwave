@@ -57,12 +57,16 @@ namespace GameInterface
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
 
+            var headingBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 46, 204, 113)); // mint/green
+            var buttonBg = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 45, 125, 230));     // blue
+            var buttonFg = new SolidColorBrush(Windows.UI.Colors.White);
+            var buttonBorder = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 30, 30, 30));
 
             // Creating title and buttons
             var title = new TextBlock
             {
                 Text = "Synthwave",
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(0xFF, 0x70, 0xFF, 0xAF)),
+                Foreground = headingBrush,
                 FontSize = 60,
                 FontWeight = Windows.UI.Text.FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -80,9 +84,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                Background = buttonBg,   // Neon Pink
+                Foreground = buttonFg,  // Neon Cyan
+                BorderBrush = buttonBorder, // Neon Yellow
                 BorderThickness = new Thickness(2)
             };
             playButton.Click += PlayButton_Click;
@@ -96,9 +100,9 @@ namespace GameInterface
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 10, 0, 10),
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 200)),   // Neon Pink
-                Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 247)),  // Neon Cyan
-                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 247, 0)), // Neon Yellow
+                Background = buttonBg,   // Neon Pink
+                Foreground = buttonFg,  // Neon Cyan
+                BorderBrush = buttonBorder, // Neon Yellow
                 BorderThickness = new Thickness(2)
             };
             controlsButton.Click += ControlsButton_Click;
