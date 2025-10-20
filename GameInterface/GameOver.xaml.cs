@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GameLibrary.Managers;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,17 +29,30 @@ namespace GameInterface
         private StackPanel scoresPanel;
         private int? pendingScore;
         private bool scoresLoaded;
+        private readonly Size GameSize = new Size(1152, 648);
+        private Grid grid;
 
         public GameOver()
         {
             this.InitializeComponent();
 
             // Creating new grid
-            var grid = new Grid
+            grid = new Grid
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
-                HorizontalAlignment = HorizontalAlignment.Stretch
+                HorizontalAlignment = HorizontalAlignment.Stretch,
             };
+
+            grid.Width = 1152;
+            grid.Height = 648;
+
+            double extraPadding = 80; // increase if still clipped, decrease if too large
+            var preferredWidth = grid.Width + extraPadding;
+            var preferredHeight = grid.Height + extraPadding;
+
+            ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
 
             // Defining rows and columns
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
@@ -135,7 +149,18 @@ namespace GameInterface
 
             grid.Children.Add(scoresPanel);
 
-            this.Content = grid;
+            var border = new Border
+            {
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)), // dark border
+                BorderThickness = new Thickness(6),
+                CornerRadius = new CornerRadius(4),
+                Background = new SolidColorBrush(Windows.UI.Colors.White),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Child = grid
+            };
+
+            this.Content = border;
 
             this.Loaded += async (s, e) =>
             {

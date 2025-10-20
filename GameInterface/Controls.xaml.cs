@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,16 +23,28 @@ namespace GameInterface
     /// </summary>
     public sealed partial class Controls : Page
     {
+
+        private Grid grid;
         public Controls()
         {
             this.InitializeComponent();
 
             // Creating new grid
-            var grid = new Grid
+            grid = new Grid
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
+
+            grid.Width = 1152;
+            grid.Height = 648;
+
+            double extraPadding = 80; // increase if still clipped, decrease if too large
+            var preferredWidth = grid.Width + extraPadding;
+            var preferredHeight = grid.Height + extraPadding;
+
+            ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
 
             // Defining rows and columns
@@ -93,7 +106,18 @@ namespace GameInterface
             grid.Children.Add(backButton);
             grid.Children.Add(stackPanel);
 
-            this.Content = grid;
+            var border = new Border
+            {
+                BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 20, 20, 20)), // dark border
+                BorderThickness = new Thickness(6),
+                CornerRadius = new CornerRadius(4),
+                Background = new SolidColorBrush(Windows.UI.Colors.White),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Child = grid
+            };
+
+            this.Content = border;
         }
 
         // Event handler for Back button

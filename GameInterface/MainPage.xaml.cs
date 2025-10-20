@@ -32,10 +32,15 @@ namespace GameInterface
         {
             this.InitializeComponent();
 
-            // Set grid size and preferred launch size
             gridMain.Width = 1152;
             gridMain.Height = 648;
-            ApplicationView.PreferredLaunchViewSize = new Size(1152, 648);
+
+            // Set grid size and preferred launch size
+            double extraPadding = 80; // increase if still clipped, decrease if too large
+            var preferredWidth = gridMain.Width + extraPadding;
+            var preferredHeight = gridMain.Height + extraPadding;
+
+            ApplicationView.PreferredLaunchViewSize = new Size(preferredWidth, preferredHeight);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
             // Handle window size changes to keep gridMain centered
