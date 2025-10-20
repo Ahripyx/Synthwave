@@ -60,16 +60,31 @@ namespace GameInterface
                 Text = "Score: 0",
                 FontSize = 20,
                 Foreground = new SolidColorBrush(Windows.UI.Colors.Black),
-                Margin = new Thickness(10, 10, 0, 0),
+                Margin = new Thickness(10, 10, 40, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                MaxWidth = 300, // prevents overflow past right edge
+                IsHitTestVisible = false,
+                TextAlignment = TextAlignment.Right
+            };
+            hud.Children.Add(scoreText);
+
+            var comboText = new TextBlock
+            {
+                Text = string.Empty,
+                FontSize = 18,
+                Foreground = new SolidColorBrush(Windows.UI.Colors.Black),
+                Margin = new Thickness(0, 10, 10, 0),
+                HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Top,
                 IsHitTestVisible = false
             };
-            hud.Children.Add(scoreText);
+            hud.Children.Add(comboText);
 
             gridMain.Children.Add(hud);
 
             gameManager.RegisterScoreTextBlock(scoreText);
+            gameManager.RegisterComboTextBlock(comboText);
 
             gameManager.GameOver += (finalScore) =>
             {

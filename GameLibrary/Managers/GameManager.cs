@@ -72,6 +72,12 @@ namespace GameLibrary
             scoreManager.RegisterScoreTextBlock(tb);
         }
 
+        public void RegisterComboTextBlock(TextBlock tb)
+        {
+            if (tb == null) throw new ArgumentNullException(nameof(tb));
+            scoreManager.RegisterComboTextBlock(tb);
+        }
+
         // Timer setup method
         private void SetupTimers()
         {

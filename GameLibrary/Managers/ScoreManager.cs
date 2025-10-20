@@ -19,6 +19,7 @@ namespace GameLibrary.Managers
         private readonly int comboStep;
 
         private TextBlock scoreText;
+        private TextBlock comboText;
 
         public event Action<int> ScoreChanged;
         public event Action<int> ComboChanged;
@@ -40,6 +41,7 @@ namespace GameLibrary.Managers
             ScoreChanged?.Invoke(score);
             ComboChanged?.Invoke(comboCount);
             UpdateScoreText();
+            UpdateComboText();
         }
 
         public void Reset()
@@ -49,6 +51,7 @@ namespace GameLibrary.Managers
             ScoreChanged?.Invoke(score);
             ComboChanged?.Invoke(comboCount);
             UpdateScoreText();
+            UpdateComboText();
         }
 
         // Public: reset only the combo (call when player takes damage)
@@ -56,6 +59,7 @@ namespace GameLibrary.Managers
         {
             comboCount = 0;
             ComboChanged?.Invoke(comboCount);
+            UpdateComboText();
             UpdateScoreText();
         }
 
@@ -65,14 +69,37 @@ namespace GameLibrary.Managers
             UpdateScoreText();
         }
 
+        public void RegisterComboTextBlock(TextBlock tb)
+        {
+            comboText = tb;
+            comboText.Visibility = Visibility.Collapsed;
+            comboText.Text = string.Empty;
+        }
+
         private void UpdateScoreText()
         {
             if (scoreText == null) return;
             int multiplier = 1 + (comboCount / comboStep);
             if (multiplier > 1)
-                scoreText.Text = $"Score: {score}   x{multiplier}";
+                scoreText.Text = $"Score: {score}";
             else
                 scoreText.Text = $"Score: {score}";
+        }
+
+        private void UpdateComboText()
+        {
+            if (comboText == null) return;
+            if (comboCount <= 1)
+            {
+                comboText.Text = string.Empty;
+                comboText.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                int multiplier = 1 + (comboCount / comboStep);
+                comboText.Text = $"Combo: x{multiplier}";
+                comboText.Visibility = Visibility.Visible;
+            }
         }
     }
 }
