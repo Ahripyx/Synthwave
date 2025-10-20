@@ -7,6 +7,8 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,10 +28,41 @@ namespace GameInterface
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+        /// 
+        private MediaPlayer backgroundMusic;
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+        }
+
+        public void StartBackgroundMusic()
+        {
+            if (backgroundMusic != null) return;
+
+            backgroundMusic = new MediaPlayer
+            {
+                IsLoopingEnabled = true,
+                Volume = 0.15
+            };
+
+            // Use the asset you added. Adjust volume if needed.
+            backgroundMusic.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/WAV_Mega_G_loop.wav"));
+            backgroundMusic.Play();
+        }
+
+        public void StopBackgroundMusic()
+        {
+            if (backgroundMusic == null) return;
+
+            if (backgroundMusic != null)
+            {
+                backgroundMusic.Pause();
+                backgroundMusic.Dispose();
+                backgroundMusic = null;
+            }
+
+            backgroundMusic = null;
         }
 
         /// <summary>
@@ -70,6 +103,8 @@ namespace GameInterface
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
+
+                StartBackgroundMusic();
             }
         }
 
@@ -94,6 +129,7 @@ namespace GameInterface
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            StopBackgroundMusic();
             deferral.Complete();
         }
     }
