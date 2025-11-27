@@ -4,6 +4,26 @@
 
 ---
 
+## Table of Contents
+
+- [Description](#description)
+- [Purpose](#purpose)
+- [Scope](#scope)
+- [Class Description & Diagrams](#class-description--diagrams)
+- [User Manual](#user-manual)
+  - [Installation & Running](#installation--running)
+  - [Controls](#controls)
+  - [Gameplay Mechanics](#gameplay-mechanics)
+  - [HUD & UI Elements](#hud--ui-elements)
+  - [Scoring & Combos](#scoring--combos)
+  - [Collectibles & Powerups](#collectibles--powerups)
+  - [High Scores](#high-scores)
+- [Credits](#credits)
+- [Change Log](#change-log)
+- [Bug Reports](#bug-reports)
+
+---
+
 ## Description
 
 Synthwave is a wave survival game where you must survive and increase your score as enemies spawn more frequently. The main goal is to survive as long as possible and try to get a new high score each time.
